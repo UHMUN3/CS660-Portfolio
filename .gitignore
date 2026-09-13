@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Compiled binaries (rebuild from source: csort.c, gobench/*.go)
+*.dylib
+*.so
+*.o
+MOD 7/assignment/gobench/gobench
+
+# Archives
+*.zip
+
+# Course-provided materials (not my work) — rubrics, starter code, project brief
+*Guidelines and Rubric*.pdf
+Assignment Folders/
+MOD 9/CS 660 Project Legacy System Overview.docx
+
+# Claude Code local settings
+.claude/

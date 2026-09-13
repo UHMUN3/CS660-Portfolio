@@ -1,0 +1,160 @@
+################ $ python3 typing_mismatch.py ################
+======================================================================
+PART ONE - TYPE MISMATCHES UNDER PYTHON'S DYNAMIC TYPE SYSTEM
+======================================================================
+
+[R] RUNTIME STAGE
+
+  1. str + int  ->  build_receipt_line('widget', 3)
+    -> RAISED TypeError: can only concatenate str (not "int") to str
+
+  2. annotation ignored  ->  apply_discount('19.99', 0.10)
+    -> RAISED TypeError: can't multiply sequence by non-int of type 'float'
+
+  3. silent mismatch  ->  repeat_label('7', 3)   [expected 21]
+    -> RETURNED '777'  (type: str)
+
+  4. int used as list  ->  first_id(42)
+    -> RAISED TypeError: object of type 'int' has no len()
+
+  5. unreachable_mismatch() is defined but never called
+    -> NO ERROR. The guaranteed TypeError is never discovered.
+
+[C] COMPILE STAGE
+    compile('x = "total: " + 42') -> SUCCESS (no type check)
+    compile('x = = 42') -> SyntaxError: invalid syntax
+    py_compile of this whole module -> SUCCESS (bytecode written)
+    CONCLUSION: the compile stage validates GRAMMAR, not TYPES.
+
+======================================================================
+Module reached the end. Four mismatches raised at runtime, one was
+never detected, and zero were caught before execution began.
+======================================================================
+
+################ $ python3 typing_corrected.py ################
+======================================================================
+PART ONE - CORRECTED CODE, ALIGNED WITH PYTHON'S TYPING RULES
+======================================================================
+
+[A] The same calls that failed before now succeed
+
+  1. build_receipt_line('widget', 3)
+    -> RETURNED 'widget x3'  (type: str)
+
+  2. apply_discount('19.99', 0.10)
+    -> RETURNED 17.99  (type: float)
+
+  3. add_quantities('7', 3)   [the intended arithmetic]
+    -> RETURNED 10.0  (type: float)
+
+  4. first_id([101, 102, 103])
+    -> RETURNED 101  (type: int)
+
+  5. format_total(42)   [formerly the unreachable mismatch]
+    -> RETURNED 'Order total: $42.00'  (type: str)
+
+[B] Genuinely bad input now fails loudly, at the boundary,
+    with a message that names the offending argument
+
+  6. apply_discount('nineteen', 0.10)
+    -> RAISED TypeError: price must be numeric, got non-numeric str: 'nineteen'
+
+  7. repeat_label('7', '3')
+    -> RAISED TypeError: times must be int, got str
+
+  8. first_id(42)
+    -> RAISED TypeError: records must be a sequence of int, got int
+
+  9. first_id([])
+    -> RAISED ValueError: records is empty; there is no first id
+
+======================================================================
+Errors did not disappear -- they moved. They now surface at the
+function boundary with the argument named, instead of deep inside
+an expression with an operator-level message.
+======================================================================
+
+################ $ python3 lexical.py ################
+Example 1:
+Inner sees: outer
+Outer has: outer
+
+Example 2:
+Inner sees: 20
+Middle has: 20
+Outer has: 10
+
+Example 3:
+1
+2
+2
+
+Example 3b: (added) the closure after its defining call returned
+  example_3 has already returned; calling my_counter() anyway:
+  -> 3
+
+Example 4:
+Inner: inner
+Outer: outer
+Global: global
+
+Example 5: (added) definition site vs. call site
+  audit_run  (its own local status = 'auditing')
+    report() sees status = 'module-level'
+  deploy_run (its own local status = 'deploying')
+    report() sees status = 'module-level'
+  module-level status is still 'module-level'
+
+################ $ python3 dynamic.py ################
+Example 1:
+Inner sees: outer
+Outer has: outer
+
+Example 2:
+Inner sees: 20
+Middle has: 20
+Outer has: 10
+
+Example 3:
+1
+2
+2
+
+Example 3b: (added) the counter after its frame is gone
+  stack after example_3 returned: (empty)
+  my_counter() -> NameError: 'count' is not bound anywhere in the current call stack (depth 1)
+  called inside a frame with count=100 -> 101
+
+Example 4:
+Inner: inner
+Outer: outer
+Global: global
+
+Example 5: (added) definition site vs. call site
+  audit_run  (binds status = 'auditing')
+    report() sees status = 'auditing'
+  deploy_run (binds status = 'deploying')
+    report() sees status = 'deploying'
+  outermost status is still 'module-level'
+  calling report() with an empty stack:
+    -> NameError: 'status' is not bound anywhere in the current call stack (depth 1)
+
+====================================================================
+SUMMARY OF DIVERGENCE
+====================================================================
+case                        lexical        dynamic       verdict
+--------------------------------------------------------------------
+Ex 1  inner sees x          outer          outer         same
+Ex 2  inner sees x          20             20            same
+Ex 3  counter results       1, 2, 2        1, 2, 2       same
+Ex 3b counter after return  3 (works)      NameError     DIFFERS
+Ex 4  inner sees name       inner          inner         same
+Ex 5  report() in audit     module-level   auditing      DIFFERS
+Ex 5  report() in deploy    module-level   deploying     DIFFERS
+Ex 5  report() bare call    module-level   NameError     DIFFERS
+--------------------------------------------------------------------
+Examples 1-4 agree because each callee was written inside the same
+function that called it -- the lexical chain and the call chain were
+the same chain. The models split only once those chains differ.
+====================================================================
+

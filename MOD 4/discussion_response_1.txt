@@ -1,0 +1,24 @@
+Your Java example reinforces the split I described, but it also complicates it
+in a useful way. Java has something Python doesn't: checked exceptions. A method
+declaring "throws IOException" puts the failure in the signature and the
+compiler refuses to let a caller ignore it -- which is functionally close to
+what Haskell's Either accomplishes. So Java isn't purely "errors live outside
+the type"; it's a hybrid, and the fact that Java developers widely resent
+checked exceptions (and that newer languages abandoned them) is interesting
+evidence for your tradeoff analysis.
+
+On limitations: your point about Either being wordy holds up in interactive
+code, but consider a batch data pipeline processing millions of records.
+Try/catch naturally aborts or handles one failure at a time, whereas the
+functional approach -- particularly Validation-style accumulation -- collects
+every error in one pass. That's exactly what you want in an ETL job where "row
+4,102,338 failed" is useless without the other 900 failures. I ran into a small
+version of this in the Module Four activity: my recursive sum logged bad records
+but returned a bare number, so the caller couldn't see how much data was
+skipped.
+
+A question I'd add to your debugging point: does a stack trace actually help
+more than a typed error, or does it just feel more helpful because it's
+familiar? A trace tells you where a failure surfaced, not where the bad
+assumption originated -- and in async or multithreaded Java, the trace often
+points nowhere useful.

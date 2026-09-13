@@ -1,0 +1,530 @@
+{
+  "astronomical_catalog": {
+    "catalog_name": "Deep Space Survey 2025",
+    "catalog_id": "DSS-2025",
+    "observation_date": "2025-01-15",
+    "total_objects": 25,
+    "galaxies": [
+      {
+        "galaxy_id": "GAL-001",
+        "name": "Andromeda Galaxy",
+        "type": "spiral",
+        "distance_ly": 2537000,
+        "mass_solar_masses": 1000000000000,
+        "diameter_ly": 220000,
+        "star_systems": [
+          {
+            "system_id": "SYS-001",
+            "name": "Andromedae Alpha",
+            "star_type": "G-class",
+            "temperature_k": 5778,
+            "luminosity": 1.2,
+            "age_billion_years": 4.6,
+            "planets": [
+              {
+                "planet_id": "PLT-001",
+                "name": "Kepler-442b",
+                "type": "terrestrial",
+                "mass_earth_masses": 2.3,
+                "radius_earth_radii": 1.34,
+                "orbital_period_days": 112.3,
+                "atmosphere_composition": ["nitrogen", "oxygen", "argon"],
+                "moons": [
+                  {
+                    "moon_id": "MON-001",
+                    "name": "Kepler-442b-I",
+                    "radius_km": 1737,
+                    "mass_kg": 7.342e22,
+                    "orbital_distance_km": 384400,
+                    "composition": "silicate"
+                  }
+                ]
+              },
+              {
+                "planet_id": "PLT-002",
+                "name": "Kepler-442c",
+                "type": "gas_giant",
+                "mass_earth_masses": 317.8,
+                "radius_earth_radii": 11.2,
+                "orbital_period_days": 4333,
+                "atmosphere_composition": ["hydrogen", "helium", "methane"],
+                "moons": [
+                  {
+                    "moon_id": "MON-002",
+                    "name": "Io-like",
+                    "radius_km": 1821,
+                    "mass_kg": 8.932e22,
+                    "orbital_distance_km": 421700,
+                    "composition": "sulfur_silicate"
+                  },
+                  {
+                    "moon_id": "MON-003",
+                    "name": "Europa-like",
+                    "radius_km": 1560,
+                    "mass_kg": 4.8e22,
+                    "orbital_distance_km": 671034,
+                    "composition": "ice_rock"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "galaxy_id": "GAL-002",
+        "name": "Triangulum Galaxy",
+        "type": "spiral",
+        "distance_ly": 3000000,
+        "mass_solar_masses": 50000000000,
+        "diameter_ly": 60000,
+        "star_systems": [
+          {
+            "system_id": "SYS-002",
+            "name": "Trianguli Beta",
+            "star_type": "K-class",
+            "temperature_k": 4200,
+            "luminosity": 0.4,
+            "age_billion_years": 8.1,
+            "planets": [
+              {
+                "planet_id": "PLT-003",
+                "name": "Proxima Trianguli b",
+                "type": "super_earth",
+                "mass_earth_masses": 1.27,
+                "radius_earth_radii": 1.1,
+                "orbital_period_days": 11.2,
+                "atmosphere_composition": ["carbon_dioxide", "nitrogen"],
+                "moons": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "galaxy_id": "GAL-003",
+        "name": "Whirlpool Galaxy",
+        "type": "spiral",
+        "distance_ly": 23000000,
+        "mass_solar_masses": 160000000000,
+        "diameter_ly": 76000,
+        "star_systems": [
+          {
+            "system_id": "SYS-003",
+            "name": "Whirlpool Central",
+            "star_type": "F-class",
+            "temperature_k": 6500,
+            "luminosity": 2.1,
+            "age_billion_years": 2.3,
+            "planets": [
+              {
+                "planet_id": "PLT-004",
+                "name": "Whirlpool Prime",
+                "type": "ice_giant",
+                "mass_earth_masses": 14.5,
+                "radius_earth_radii": 4.0,
+                "orbital_period_days": 84.0,
+                "atmosphere_composition": ["hydrogen", "helium", "water", "ammonia"],
+                "moons": [
+                  {
+                    "moon_id": "MON-004",
+                    "name": "Frost",
+                    "radius_km": 788,
+                    "mass_kg": 1.35e21,
+                    "orbital_distance_km": 191020,
+                    "composition": "ice_rock"
+                  },
+                  {
+                    "moon_id": "MON-005",
+                    "name": "Glacier",
+                    "radius_km": 584,
+                    "mass_kg": 6.59e20,
+                    "orbital_distance_km": 266300,
+                    "composition": "ice"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "galaxy_id": "GAL-004",
+        "name": "Sombrero Galaxy",
+        "type": "lenticular",
+        "distance_ly": 29350000,
+        "mass_solar_masses": 800000000000,
+        "diameter_ly": 50000,
+        "star_systems": [
+          {
+            "system_id": "SYS-004",
+            "name": "Sombrero Edge",
+            "star_type": "M-class",
+            "temperature_k": 3200,
+            "luminosity": 0.08,
+            "age_billion_years": 12.8,
+            "planets": [
+              {
+                "planet_id": "PLT-005",
+                "name": "Red Dwarf World",
+                "type": "terrestrial",
+                "mass_earth_masses": 0.82,
+                "radius_earth_radii": 0.95,
+                "orbital_period_days": 28.1,
+                "atmosphere_composition": ["carbon_dioxide", "water_vapor"],
+                "moons": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "galaxy_id": "GAL-005",
+        "name": "Pinwheel Galaxy",
+        "type": "spiral",
+        "distance_ly": 21000000,
+        "mass_solar_masses": 100000000000,
+        "diameter_ly": 170000,
+        "star_systems": [
+          {
+            "system_id": "SYS-005",
+            "name": "Pinwheel Outer Arm",
+            "star_type": "B-class",
+            "temperature_k": 15000,
+            "luminosity": 25000,
+            "age_billion_years": 0.1,
+            "planets": [
+              {
+                "planet_id": "PLT-006",
+                "name": "Hot Jupiter",
+                "type": "gas_giant",
+                "mass_earth_masses": 429.2,
+                "radius_earth_radii": 12.8,
+                "orbital_period_days": 3.2,
+                "atmosphere_composition": ["hydrogen", "helium"],
+                "moons": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "nebulae": [
+      {
+        "nebula_id": "NEB-001",
+        "name": "Eagle Nebula",
+        "type": "emission",
+        "distance_ly": 7000,
+        "diameter_ly": 70,
+        "temperature_k": 10000,
+        "forming_stars": [
+          {
+            "star_id": "STAR-001",
+            "name": "Eagle-1",
+            "formation_stage": "protostar",
+            "mass_solar_masses": 0.5,
+            "temperature_k": 2000,
+            "age_million_years": 0.1,
+            "surrounding_disk": {
+              "disk_mass_earth_masses": 100,
+              "disk_radius_au": 200,
+              "composition": ["dust", "gas", "ice"]
+            }
+          }
+        ]
+      },
+      {
+        "nebula_id": "NEB-002",
+        "name": "Horsehead Nebula",
+        "type": "dark",
+        "distance_ly": 1500,
+        "diameter_ly": 3.5,
+        "temperature_k": 20,
+        "forming_stars": []
+      },
+      {
+        "nebula_id": "NEB-003",
+        "name": "Orion Nebula",
+        "type": "emission",
+        "distance_ly": 1344,
+        "diameter_ly": 24,
+        "temperature_k": 10000,
+        "forming_stars": [
+          {
+            "star_id": "STAR-002",
+            "name": "Orion-Alpha",
+            "formation_stage": "main_sequence",
+            "mass_solar_masses": 1.8,
+            "temperature_k": 6800,
+            "age_million_years": 300,
+            "surrounding_disk": null
+          },
+          {
+            "star_id": "STAR-003",
+            "name": "Orion-Beta",
+            "formation_stage": "T_Tauri",
+            "mass_solar_masses": 0.8,
+            "temperature_k": 4000,
+            "age_million_years": 1.2,
+            "surrounding_disk": {
+              "disk_mass_earth_masses": 50,
+              "disk_radius_au": 150,
+              "composition": ["dust", "gas"]
+            }
+          }
+        ]
+      }
+    ],
+    "star_clusters": [
+      {
+        "cluster_id": "CLS-001",
+        "name": "Pleiades",
+        "type": "open",
+        "distance_ly": 444,
+        "diameter_ly": 30,
+        "age_million_years": 100,
+        "star_count": 1000,
+        "notable_stars": [
+          {
+            "star_id": "STAR-004",
+            "name": "Alcyone",
+            "spectral_class": "B7III",
+            "mass_solar_masses": 6.1,
+            "temperature_k": 12500,
+            "luminosity": 2400,
+            "binary_system": {
+              "companion_star": {
+                "name": "Alcyone B",
+                "spectral_class": "A0V",
+                "mass_solar_masses": 2.1,
+                "orbital_period_days": 830
+              }
+            }
+          }
+        ]
+      },
+      {
+        "cluster_id": "CLS-002",
+        "name": "Hyades",
+        "type": "open",
+        "distance_ly": 153,
+        "diameter_ly": 75,
+        "age_million_years": 625,
+        "star_count": 400,
+        "notable_stars": [
+          {
+            "star_id": "STAR-005",
+            "name": "Aldebaran",
+            "spectral_class": "K5III",
+            "mass_solar_masses": 1.16,
+            "temperature_k": 3910,
+            "luminosity": 518,
+            "binary_system": null
+          }
+        ]
+      },
+      {
+        "cluster_id": "CLS-003",
+        "name": "Omega Centauri",
+        "type": "globular",
+        "distance_ly": 15800,
+        "diameter_ly": 230,
+        "age_million_years": 12000,
+        "star_count": 10000000,
+        "notable_stars": [
+          {
+            "star_id": "STAR-006",
+            "name": "Omega Cen Central",
+            "spectral_class": "G2V",
+            "mass_solar_masses": 1.05,
+            "temperature_k": 5800,
+            "luminosity": 1.1,
+            "binary_system": null
+          }
+        ]
+      }
+    ],
+    "black_holes": [
+      {
+        "black_hole_id": "BH-001",
+        "name": "Sagittarius A*",
+        "type": "supermassive",
+        "mass_solar_masses": 4310000,
+        "schwarzschild_radius_km": 12700000,
+        "location_galaxy": "Milky Way",
+        "accretion_disk": {
+          "inner_radius_km": 25400000,
+          "outer_radius_km": 190000000,
+          "temperature_k": 1000000,
+          "luminosity_watts": 3.6e28
+        },
+        "orbiting_objects": [
+          {
+            "object_id": "ORB-001",
+            "name": "S2 Star",
+            "type": "star",
+            "mass_solar_masses": 14,
+            "orbital_period_years": 16.05,
+            "closest_approach_au": 970
+          }
+        ]
+      },
+      {
+        "black_hole_id": "BH-002",
+        "name": "Cygnus X-1",
+        "type": "stellar",
+        "mass_solar_masses": 21,
+        "schwarzschild_radius_km": 62,
+        "location_galaxy": "Milky Way",
+        "accretion_disk": {
+          "inner_radius_km": 186,
+          "outer_radius_km": 6200,
+          "temperature_k": 3000000,
+          "luminosity_watts": 1.2e31
+        },
+        "orbiting_objects": [
+          {
+            "object_id": "ORB-002",
+            "name": "HDE 226868",
+            "type": "blue_supergiant",
+            "mass_solar_masses": 40.6,
+            "orbital_period_years": 0.0151,
+            "closest_approach_au": 0.2
+          }
+        ]
+      }
+    ],
+    "exoplanet_systems": [
+      {
+        "system_id": "EXO-001",
+        "name": "TRAPPIST-1",
+        "host_star": {
+          "name": "TRAPPIST-1",
+          "spectral_class": "M8V",
+          "mass_solar_masses": 0.089,
+          "temperature_k": 2559,
+          "age_billion_years": 7.6
+        },
+        "distance_ly": 39.5,
+        "planets": [
+          {
+            "planet_id": "TRP-001",
+            "name": "TRAPPIST-1b",
+            "mass_earth_masses": 1.374,
+            "radius_earth_radii": 1.116,
+            "orbital_period_days": 1.51,
+            "habitable_zone": false,
+            "atmosphere": "likely_none"
+          },
+          {
+            "planet_id": "TRP-002",
+            "name": "TRAPPIST-1c",
+            "mass_earth_masses": 1.308,
+            "radius_earth_radii": 1.097,
+            "orbital_period_days": 2.42,
+            "habitable_zone": false,
+            "atmosphere": "tenuous"
+          },
+          {
+            "planet_id": "TRP-003",
+            "name": "TRAPPIST-1d",
+            "mass_earth_masses": 0.388,
+            "radius_earth_radii": 0.788,
+            "orbital_period_days": 4.05,
+            "habitable_zone": true,
+            "atmosphere": "possible_water_vapor"
+          }
+        ]
+      },
+      {
+        "system_id": "EXO-002",
+        "name": "Kepler-452",
+        "host_star": {
+          "name": "Kepler-452",
+          "spectral_class": "G2V",
+          "mass_solar_masses": 1.037,
+          "temperature_k": 5757,
+          "age_billion_years": 6.0
+        },
+        "distance_ly": 1402,
+        "planets": [
+          {
+            "planet_id": "K452-001",
+            "name": "Kepler-452b",
+            "mass_earth_masses": 5.0,
+            "radius_earth_radii": 1.63,
+            "orbital_period_days": 384.8,
+            "habitable_zone": true,
+            "atmosphere": "unknown_potentially_thick"
+          }
+        ]
+      },
+      {
+        "system_id": "EXO-003",
+        "name": "Proxima Centauri",
+        "host_star": {
+          "name": "Proxima Centauri",
+          "spectral_class": "M5.5Ve",
+          "mass_solar_masses": 0.1221,
+          "temperature_k": 3042,
+          "age_billion_years": 4.85
+        },
+        "distance_ly": 4.24,
+        "planets": [
+          {
+            "planet_id": "PRX-001",
+            "name": "Proxima Centauri b",
+            "mass_earth_masses": 1.17,
+            "radius_earth_radii": 1.07,
+            "orbital_period_days": 11.19,
+            "habitable_zone": true,
+            "atmosphere": "uncertain"
+          },
+          {
+            "planet_id": "PRX-002",
+            "name": "Proxima Centauri c",
+            "mass_earth_masses": 7.0,
+            "radius_earth_radii": 2.4,
+            "orbital_period_days": 1928,
+            "habitable_zone": false,
+            "atmosphere": "likely_none"
+          }
+        ]
+      }
+    ],
+    "pulsars": [
+      {
+        "pulsar_id": "PSR-001",
+        "name": "PSR B1919+21",
+        "type": "rotation_powered",
+        "period_seconds": 1.337,
+        "frequency_hz": 0.748,
+        "magnetic_field_gauss": 5e11,
+        "distance_ly": 2283,
+        "age_years": 10700000,
+        "spin_down_rate": 4.21e-15,
+        "companion_objects": []
+      },
+      {
+        "pulsar_id": "PSR-002",
+        "name": "PSR J1614-2230",
+        "type": "millisecond",
+        "period_seconds": 0.00315,
+        "frequency_hz": 317.4,
+        "magnetic_field_gauss": 4.5e8,
+        "distance_ly": 3200,
+        "age_years": 1200000000,
+        "spin_down_rate": 9.4e-21,
+        "companion_objects": [
+          {
+            "object_id": "COMP-001",
+            "name": "White Dwarf Companion",
+            "type": "white_dwarf",
+            "mass_solar_masses": 0.5,
+            "orbital_period_days": 8.69
+          }
+        ]
+      }
+    ]
+  }
+}

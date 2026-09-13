@@ -1,0 +1,27 @@
+This is a really thorough breakdown, and your closing point -- that the two
+approaches are complementary rather than competing -- is the part I agree with
+most. Your banking example actually gives that argument even more support than
+you claimed for it.
+
+A funds transfer is a side-effecting sequence, so if Either short-circuits after
+step three of four, you get a Left describing the failure, but the first two
+database writes already happened. The short-circuit stops further computation
+without undoing what's done. That seems like a good illustration of your point:
+Java's try/finally paired with a transaction manager fits here because unwinding
+the stack gives you a guaranteed place to hang the rollback, while functional
+composition shines on the pure validation steps that come first -- account
+exists, funds sufficient, limits respected. Scala's Resource and bracket
+patterns exist for exactly this reason, which reinforces your observation that
+real systems blend both models.
+
+Your interop paragraph is well taken too. One detail I found interesting is that
+scala.util.Try catches only NonFatal exceptions, so things like
+OutOfMemoryError pass straight through. A sensible design choice, though it
+means wrapping Java calls takes a bit more care than it first appears.
+
+Building on your Melo et al. citation: if inconsistent exception handling is
+partly a discipline problem, how much of it does a type system actually solve?
+"case Left(e) => log(e)" compiles just as cleanly as
+"catch (Exception e) { log(e); }". I'd be curious whether you see the functional
+approach as genuinely preventing that, or mainly as making it easier to spot in
+code review.

@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1330" viewBox="0 0 1500 1330">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6E6E78"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C0392B"/>
+    </marker>
+    <marker id="arrowUp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3E6E9E"/>
+    </marker>
+  </defs>
+
+  <style>
+    .ttl   { font-family: Helvetica, Arial, sans-serif; font-size: 31px; font-weight: bold; fill: #1B1B22; }
+    .sub   { font-family: Helvetica, Arial, sans-serif; font-size: 17px; fill: #55555F; }
+    .band  { font-family: Helvetica, Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #1B1B22; }
+    .bandn { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-style: italic; fill: #62626C; }
+    .bt    { font-family: Menlo, Consolas, monospace; font-size: 17px; font-weight: bold; fill: #14141A; }
+    .bd    { font-family: Menlo, Consolas, monospace; font-size: 13.5px; fill: #3A3A44; }
+    .bs    { font-family: Helvetica, Arial, sans-serif; font-size: 13px; fill: #4A4A55; }
+    .bsi   { font-family: Helvetica, Arial, sans-serif; font-size: 13px; font-style: italic; fill: #62626C; }
+    .code  { font-family: Menlo, Consolas, monospace; font-size: 14.5px; fill: #1F1F28; }
+    .red   { fill: #C0392B; }
+    .redb  { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #C0392B; }
+    .lbl   { font-family: Helvetica, Arial, sans-serif; font-size: 13px; fill: #6E6E78; }
+    .lgd   { font-family: Helvetica, Arial, sans-serif; font-size: 13.5px; fill: #3A3A44; }
+  </style>
+
+  <rect width="1500" height="1330" fill="#FFFFFF"/>
+
+  <!-- ================= TITLE ================= -->
+  <text x="40" y="42" class="ttl">JVM Memory Layout: Three Threads Executing fibonacci(2)</text>
+  <text x="40" y="68" class="sub">SampleFibonacci.java — per-thread call stacks, shared heap allocation, and a shared static counter</text>
+
+  <!-- ================= SCENARIO ================= -->
+  <rect x="40" y="88" width="680" height="150" rx="6" fill="#FAFAFC" stroke="#B9B9C4" stroke-width="1.5"/>
+  <text x="58" y="112" class="band" font-size="16">Recursive function (depth 2 for n = 2)</text>
+  <text x="58" y="138" class="code">static int fibonacci(int n) {</text>
+  <text x="58" y="158" class="code">    if (n == 0) return 0;          // base case</text>
+  <text x="58" y="178" class="code">    if (n == 1) return 1;          // base case</text>
+  <text x="58" y="198" class="code">    return fibonacci(n-1) + fibonacci(n-2);</text>
+  <text x="58" y="218" class="code">}</text>
+
+  <rect x="740" y="88" width="720" height="150" rx="6" fill="#FAFAFC" stroke="#B9B9C4" stroke-width="1.5"/>
+  <text x="758" y="112" class="band" font-size="16">Multithreaded scenario</text>
+  <text x="758" y="136" class="bs">main() launches Thread-1, Thread-2, Thread-3 — each wraps a Worker(threadId, n = 2)</text>
+  <text x="758" y="156" class="bs">Every thread runs the same code but on its own private stack.</text>
+  <text x="758" y="182" class="bs" font-weight="bold">Call tree for fibonacci(2):</text>
+
+  <rect x="960" y="176" width="86" height="26" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.5"/>
+  <text x="1003" y="194" class="bd" text-anchor="middle">fib(2)</text>
+  <line x1="1003" y1="202" x2="945" y2="212" stroke="#6E6E78" stroke-width="1.5"/>
+  <line x1="1003" y1="202" x2="1063" y2="212" stroke="#6E6E78" stroke-width="1.5"/>
+  <rect x="898" y="212" width="94" height="26" rx="4" fill="#EDF4FB" stroke="#3E6E9E" stroke-width="1.2"/>
+  <text x="945" y="230" class="bd" text-anchor="middle">fib(1)→1</text>
+  <rect x="1016" y="212" width="94" height="26" rx="4" fill="#EDF4FB" stroke="#3E6E9E" stroke-width="1.2"/>
+  <text x="1063" y="230" class="bd" text-anchor="middle">fib(0)→0</text>
+  <text x="1130" y="212" class="bs">Two child calls, evaluated one</text>
+  <text x="1130" y="230" class="bs">at a time: 1 + 0 = 1</text>
+
+  <!-- ================= STACKS ================= -->
+  <text x="40" y="278" class="band">1 &#160; Per-Thread JVM Stacks</text>
+  <text x="352" y="278" class="bandn">private to each thread — never shared, reclaimed automatically when a frame returns</text>
+  <line x1="40" y1="288" x2="1460" y2="288" stroke="#C8C8D2" stroke-width="1.5"/>
+
+  <g id="stacks">
+    <!-- Thread 1 -->
+    <rect x="40" y="300" width="440" height="418" rx="8" fill="#F4F8FC" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="60" y="326" class="band" font-size="17">Thread-1 &#160;stack</text>
+    <text x="60" y="345" class="bsi">Worker(threadId = 1, n = 2)</text>
+
+    <rect x="96" y="356" width="366" height="62" rx="4" fill="#C3DBF2" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="110" y="379" class="bt">fibonacci(n = 1)</text>
+    <text x="110" y="399" class="bd">n = 1 · returns 1 &#160;&#160;← deepest frame</text>
+
+    <rect x="96" y="426" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="110" y="449" class="bt">fibonacci(n = 2)</text>
+    <text x="110" y="469" class="bd">n = 2 · operand stack holds partial sum</text>
+
+    <rect x="96" y="496" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="110" y="519" class="bt">Worker.run()</text>
+    <text x="110" y="539" class="bd">this → Worker@1 · int result</text>
+
+    <rect x="96" y="566" width="366" height="62" rx="4" fill="#EDF4FB" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="110" y="589" class="bt">Thread.run()</text>
+    <text x="110" y="609" class="bd">thread entry point (stack base)</text>
+
+    <line x1="72" y1="626" x2="72" y2="358" stroke="#3E6E9E" stroke-width="2" marker-end="url(#arrowUp)"/>
+    <text x="60" y="652" class="bs">Stack grows upward with each call; frames pop on return.</text>
+    <text x="60" y="672" class="bs">Each frame holds: parameters, local primitives,</text>
+    <text x="60" y="690" class="bs">object references, return address, operand stack.</text>
+    <text x="60" y="710" class="bsi">Fixed size per thread (-Xss) — overflow throws StackOverflowError.</text>
+
+    <!-- Thread 2 -->
+    <rect x="530" y="300" width="440" height="418" rx="8" fill="#F4F8FC" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="550" y="326" class="band" font-size="17">Thread-2 &#160;stack</text>
+    <text x="550" y="345" class="bsi">Worker(threadId = 2, n = 2)</text>
+
+    <rect x="586" y="356" width="366" height="62" rx="4" fill="#C3DBF2" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="600" y="379" class="bt">fibonacci(n = 1)</text>
+    <text x="600" y="399" class="bd">n = 1 · returns 1 &#160;&#160;← deepest frame</text>
+
+    <rect x="586" y="426" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="600" y="449" class="bt">fibonacci(n = 2)</text>
+    <text x="600" y="469" class="bd">n = 2 · operand stack holds partial sum</text>
+
+    <rect x="586" y="496" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="600" y="519" class="bt">Worker.run()</text>
+    <text x="600" y="539" class="bd">this → Worker@2 · int result</text>
+
+    <rect x="586" y="566" width="366" height="62" rx="4" fill="#EDF4FB" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="600" y="589" class="bt">Thread.run()</text>
+    <text x="600" y="609" class="bd">thread entry point (stack base)</text>
+
+    <line x1="562" y1="626" x2="562" y2="358" stroke="#3E6E9E" stroke-width="2" marker-end="url(#arrowUp)"/>
+    <text x="550" y="652" class="bs">Identical code, independent memory: Thread-2's</text>
+    <text x="550" y="670" class="bs">value of n is invisible to Thread-1 and Thread-3.</text>
+    <text x="550" y="694" class="bsi">Local primitives are therefore inherently thread-safe;</text>
+    <text x="550" y="712" class="bsi">only heap data needs synchronization.</text>
+
+    <!-- Thread 3 -->
+    <rect x="1020" y="300" width="440" height="418" rx="8" fill="#F4F8FC" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="1040" y="326" class="band" font-size="17">Thread-3 &#160;stack</text>
+    <text x="1040" y="345" class="bsi">Worker(threadId = 3, n = 2)</text>
+
+    <rect x="1076" y="356" width="366" height="62" rx="4" fill="#C3DBF2" stroke="#3E6E9E" stroke-width="2"/>
+    <text x="1090" y="379" class="bt">fibonacci(n = 1)</text>
+    <text x="1090" y="399" class="bd">n = 1 · returns 1 &#160;&#160;← deepest frame</text>
+
+    <rect x="1076" y="426" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="1090" y="449" class="bt">fibonacci(n = 2)</text>
+    <text x="1090" y="469" class="bd">n = 2 · operand stack holds partial sum</text>
+
+    <rect x="1076" y="496" width="366" height="62" rx="4" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="1090" y="519" class="bt">Worker.run()</text>
+    <text x="1090" y="539" class="bd">this → Worker@3 · int result</text>
+
+    <rect x="1076" y="566" width="366" height="62" rx="4" fill="#EDF4FB" stroke="#3E6E9E" stroke-width="1.6"/>
+    <text x="1090" y="589" class="bt">Thread.run()</text>
+    <text x="1090" y="609" class="bd">thread entry point (stack base)</text>
+
+    <line x1="1052" y1="626" x2="1052" y2="358" stroke="#3E6E9E" stroke-width="2" marker-end="url(#arrowUp)"/>
+    <text x="1040" y="652" class="bs">Maximum depth here is only 2 recursive frames.</text>
+    <text x="1040" y="670" class="bs">fibonacci(n) recurses n deep and makes O(1.6ⁿ)</text>
+    <text x="1040" y="688" class="bs">calls, so depth scales with the argument.</text>
+    <text x="1040" y="712" class="bsi">Total stack memory = threads × per-thread stack size.</text>
+  </g>
+
+  <!-- ================= HEAP ================= -->
+  <text x="40" y="744" class="band">2 &#160; Java Heap</text>
+  <text x="188" y="744" class="bandn">shared by every thread — where all objects live, reclaimed by the garbage collector</text>
+  <line x1="40" y1="754" x2="1460" y2="754" stroke="#C8C8D2" stroke-width="1.5"/>
+
+  <!-- each Worker.run() frame holds a this reference into the heap object below it -->
+  <line x1="260" y1="762" x2="260" y2="788" stroke="#6E6E78" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <line x1="750" y1="762" x2="750" y2="788" stroke="#6E6E78" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <line x1="1240" y1="762" x2="1240" y2="788" stroke="#6E6E78" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <text x="278" y="778" class="lbl">this</text>
+  <text x="768" y="778" class="lbl">this</text>
+  <text x="1258" y="778" class="lbl">this</text>
+
+  <rect x="110" y="792" width="300" height="96" rx="6" fill="#DFF0DC" stroke="#4E8A46" stroke-width="2"/>
+  <text x="128" y="817" class="bt">Worker@1</text>
+  <text x="128" y="840" class="bd">int threadId = 1</text>
+  <text x="128" y="860" class="bd">int n = 2</text>
+  <text x="128" y="879" class="bsi">allocated by main() before start()</text>
+
+  <rect x="600" y="792" width="300" height="96" rx="6" fill="#DFF0DC" stroke="#4E8A46" stroke-width="2"/>
+  <text x="618" y="817" class="bt">Worker@2</text>
+  <text x="618" y="840" class="bd">int threadId = 2</text>
+  <text x="618" y="860" class="bd">int n = 2</text>
+  <text x="618" y="879" class="bsi">allocated by main() before start()</text>
+
+  <rect x="1090" y="792" width="300" height="96" rx="6" fill="#DFF0DC" stroke="#4E8A46" stroke-width="2"/>
+  <text x="1108" y="817" class="bt">Worker@3</text>
+  <text x="1108" y="840" class="bd">int threadId = 3</text>
+  <text x="1108" y="860" class="bd">int n = 2</text>
+  <text x="1108" y="879" class="bsi">allocated by main() before start()</text>
+
+  <rect x="110" y="900" width="300" height="42" rx="5" fill="#EDF7EB" stroke="#4E8A46" stroke-width="1.3"/>
+  <text x="128" y="927" class="bd">Thread@1 (java.lang.Thread)</text>
+  <rect x="600" y="900" width="300" height="42" rx="5" fill="#EDF7EB" stroke="#4E8A46" stroke-width="1.3"/>
+  <text x="618" y="927" class="bd">Thread@2 (java.lang.Thread)</text>
+  <rect x="1090" y="900" width="300" height="42" rx="5" fill="#EDF7EB" stroke="#4E8A46" stroke-width="1.3"/>
+  <text x="1108" y="927" class="bd">Thread@3 (java.lang.Thread)</text>
+
+  <!-- convergence on the shared static -->
+  <path d="M 260 942 L 260 985 L 470 985 L 470 1012" fill="none" stroke="#C0392B" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+  <path d="M 750 942 L 750 1012" fill="none" stroke="#C0392B" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+  <path d="M 1240 942 L 1240 985 L 1030 985 L 1030 1012" fill="none" stroke="#C0392B" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+  <text x="790" y="978" class="redb">all three threads mutate one variable</text>
+
+  <rect x="330" y="1012" width="840" height="126" rx="6" fill="#FBE9C8" stroke="#B5872A" stroke-width="2.5"/>
+  <text x="352" y="1040" class="bt">Class&lt;SampleFibonacci&gt;  —  static area (on the heap since Java 8)</text>
+  <rect x="352" y="1052" width="330" height="32" rx="4" fill="#F7D7D2" stroke="#C0392B" stroke-width="2"/>
+  <text x="366" y="1074" class="bt red">static int counter = 0</text>
+  <text x="700" y="1074" class="redb">← shared mutable state</text>
+  <text x="352" y="1104" class="bs">Guarded by <tspan class="bd">synchronized incrementCounter()</tspan>, which locks the</text>
+  <text x="352" y="1124" class="bs"><tspan class="bd">SampleFibonacci.class</tspan> monitor — one thread increments at a time.</text>
+
+  <!-- ================= METASPACE ================= -->
+  <text x="40" y="1182" class="band">3 &#160; Metaspace</text>
+  <text x="205" y="1182" class="bandn">native memory outside the heap (replaced PermGen in Java 8)</text>
+  <line x1="40" y1="1192" x2="1460" y2="1192" stroke="#C8C8D2" stroke-width="1.5"/>
+  <rect x="40" y="1202" width="1420" height="62" rx="6" fill="#E9E9EE" stroke="#77778A" stroke-width="1.8"/>
+  <text x="60" y="1226" class="bd">Class metadata: bytecode for fibonacci() and Worker.run(), method tables, field layouts, runtime constant pool</text>
+  <text x="60" y="1250" class="bsi">Holds the definition of each class. The static field's value lives with the Class object on the heap above, not here.</text>
+
+  <!-- ================= LEGEND ================= -->
+  <rect x="40" y="1284" width="20" height="14" fill="#DCE9F7" stroke="#3E6E9E" stroke-width="1.5"/>
+  <text x="68" y="1296" class="lgd">Stack frame (per-thread)</text>
+  <rect x="272" y="1284" width="20" height="14" fill="#DFF0DC" stroke="#4E8A46" stroke-width="1.5"/>
+  <text x="300" y="1296" class="lgd">Heap object (shared)</text>
+  <rect x="480" y="1284" width="20" height="14" fill="#FBE9C8" stroke="#B5872A" stroke-width="1.5"/>
+  <text x="508" y="1296" class="lgd">Static area (shared)</text>
+  <rect x="688" y="1284" width="20" height="14" fill="#E9E9EE" stroke="#77778A" stroke-width="1.5"/>
+  <text x="716" y="1296" class="lgd">Metaspace (native)</text>
+  <line x1="900" y1="1291" x2="944" y2="1291" stroke="#6E6E78" stroke-width="1.6" stroke-dasharray="5,4"/>
+  <text x="952" y="1296" class="lgd">Object reference</text>
+  <line x1="1112" y1="1291" x2="1156" y2="1291" stroke="#C0392B" stroke-width="2.2"/>
+  <text x="1164" y="1296" class="lgd">Contended write (race risk)</text>
+</svg>

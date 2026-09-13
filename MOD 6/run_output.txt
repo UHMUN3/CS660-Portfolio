@@ -1,0 +1,137 @@
+
+========================================================================================
+  CS 660 Module Six Activity -- Concurrent Mark-and-Sweep Memory Simulation
+========================================================================================
+Pool capacity   : 256 B
+Mutator threads : 3  (5 operations each)
+Collector       : 1 background thread, stop-the-world, 40 ms interval
+
+Event legend
+    THREAD   thread lifecycle and coordination
+    ALLOC    pool grants bytes for a new object
+    CREATE   object constructed and rooted in a thread's frame
+    LINK     one object stores a reference to another
+    DROP     thread releases a root reference (object may be garbage)
+    OOM      allocation refused -- pool exhausted
+    GC-STOP  stop-the-world requested / mutators paused
+    GC-MARK  mark phase: tracing reachability from the root set
+    RECLAIM  sweep phase: unreachable object's memory reclaimed
+    GC-DONE  collection finished, pool utilization reported
+
+[    0.09 ms] Collector   THREAD   collector online -- periodic sweep every 40 ms
+[    0.12 ms] MainThread  THREAD   main launching 3 mutator thread(s)
+[    0.17 ms] Mutator-1   THREAD   started -- entering allocate/release loop
+[    0.18 ms] Mutator-1   ALLOC    reserved 16B for obj#1  ->  pool at 16/256B
+[    0.19 ms] Mutator-1   CREATE   obj#1 constructed and rooted in Mutator-1's frame
+[    0.25 ms] Mutator-2   THREAD   started -- entering allocate/release loop
+[    0.26 ms] Mutator-2   ALLOC    reserved 24B for obj#2  ->  pool at 40/256B
+[    0.27 ms] Mutator-2   CREATE   obj#2 constructed and rooted in Mutator-2's frame
+[    0.31 ms] Mutator-3   THREAD   started -- entering allocate/release loop
+[    0.32 ms] Mutator-3   ALLOC    reserved 16B for obj#3  ->  pool at 56/256B
+[    0.32 ms] Mutator-3   CREATE   obj#3 constructed and rooted in Mutator-3's frame
+[   14.85 ms] Mutator-3   ALLOC    reserved 32B for obj#4  ->  pool at 88/256B
+[   14.86 ms] Mutator-3   CREATE   obj#4 constructed and rooted in Mutator-3's frame
+[   19.26 ms] Mutator-2   ALLOC    reserved 16B for obj#5  ->  pool at 104/256B
+[   19.28 ms] Mutator-2   CREATE   obj#5 constructed and rooted in Mutator-2's frame
+[   25.85 ms] Mutator-1   ALLOC    reserved 32B for obj#6  ->  pool at 136/256B
+[   25.87 ms] Mutator-1   CREATE   obj#6 constructed and rooted in Mutator-1's frame
+[   32.10 ms] Mutator-1   LINK     obj#1 now references obj#6
+[   32.12 ms] Mutator-1   DROP     Mutator-1 released obj#6 -- candidate for sweeping
+[   36.39 ms] Mutator-2   ALLOC    reserved 40B for obj#7  ->  pool at 176/256B
+[   36.41 ms] Mutator-2   CREATE   obj#7 constructed and rooted in Mutator-2's frame
+[   40.08 ms] Mutator-3   ALLOC    reserved 16B for obj#8  ->  pool at 192/256B
+[   40.09 ms] Mutator-3   CREATE   obj#8 constructed and rooted in Mutator-3's frame
+[   43.76 ms] Mutator-2   LINK     obj#5 now references obj#7
+[   43.77 ms] Mutator-2   LINK     obj#7 now references obj#5
+[   43.78 ms] Mutator-2   THREAD   built reference cycle obj#5 <-> obj#7, abandoning both
+[   43.79 ms] Mutator-2   DROP     Mutator-2 released obj#5 -- candidate for sweeping
+[   43.79 ms] Mutator-2   DROP     Mutator-2 released obj#7 -- candidate for sweeping
+[   44.65 ms] Collector   GC-STOP  collection requested (periodic timer)
+[   44.68 ms] Collector   GC-STOP  waiting for 1 active mutator(s) to reach a safepoint
+[   47.50 ms] Mutator-3   THREAD   paused at safepoint -- collector holds the world
+[   47.53 ms] Collector   GC-STOP  world stopped -- heap is quiescent
+[   47.56 ms] Collector   GC-MARK  cycle 1: mark from 5 roots: #1, #2, #3, #4, #8
+[   47.57 ms] Collector   GC-MARK  cycle 1: 6 of 8 object(s) reachable
+[   47.58 ms] Collector   RECLAIM  cycle 1: swept obj#5 (16B, allocated by Mutator-2)
+[   47.58 ms] Collector   RECLAIM  cycle 1: swept obj#7 (40B, allocated by Mutator-2)
+[   47.59 ms] Collector   GC-DONE  cycle 1: freed 2 obj / 56B  |  [#######.......] 136/256B (53.1%)
+[   47.60 ms] Collector   GC-STOP  world resumed -- mutators released
+[   47.62 ms] Mutator-3   LINK     obj#4 now references obj#8
+[   47.62 ms] Mutator-3   LINK     obj#8 now references obj#4
+[   47.62 ms] Mutator-3   THREAD   built reference cycle obj#4 <-> obj#8, abandoning both
+[   47.63 ms] Mutator-3   DROP     Mutator-3 released obj#4 -- candidate for sweeping
+[   47.63 ms] Mutator-3   DROP     Mutator-3 released obj#8 -- candidate for sweeping
+[   53.90 ms] Mutator-1   ALLOC    reserved 16B for obj#9  ->  pool at 152/256B
+[   53.91 ms] Mutator-1   CREATE   obj#9 constructed and rooted in Mutator-1's frame
+[   59.24 ms] Mutator-2   ALLOC    reserved 24B for obj#10  ->  pool at 176/256B
+[   59.26 ms] Mutator-2   CREATE   obj#10 constructed and rooted in Mutator-2's frame
+[   64.68 ms] Mutator-2   DROP     Mutator-2 released obj#10 -- candidate for sweeping
+[   65.36 ms] Mutator-3   ALLOC    reserved 40B for obj#11  ->  pool at 216/256B
+[   65.37 ms] Mutator-3   CREATE   obj#11 constructed and rooted in Mutator-3's frame
+[   66.05 ms] Mutator-1   ALLOC    reserved 40B for obj#12  ->  pool at 256/256B
+[   66.05 ms] Mutator-1   CREATE   obj#12 constructed and rooted in Mutator-1's frame
+[   69.72 ms] Mutator-3   DROP     Mutator-3 released obj#3 -- candidate for sweeping
+[   71.33 ms] Mutator-1   DROP     Mutator-1 released obj#1 -- candidate for sweeping
+[   77.90 ms] Mutator-3   OOM      request for 40B refused -- only 0B free
+[   77.92 ms] Mutator-3   GC-STOP  collection requested (allocation failure -- reclaiming space)
+[   77.95 ms] Mutator-3   GC-STOP  world stopped -- heap is quiescent
+[   77.98 ms] Mutator-3   GC-MARK  cycle 2: mark from 4 roots: #2, #9, #11, #12
+[   77.99 ms] Mutator-3   GC-MARK  cycle 2: 4 of 10 object(s) reachable
+[   78.00 ms] Mutator-3   RECLAIM  cycle 2: swept obj#1 (16B, allocated by Mutator-1)
+[   78.00 ms] Mutator-3   RECLAIM  cycle 2: swept obj#3 (16B, allocated by Mutator-3)
+[   78.00 ms] Mutator-3   RECLAIM  cycle 2: swept obj#4 (32B, allocated by Mutator-3)
+[   78.00 ms] Mutator-3   RECLAIM  cycle 2: swept obj#6 (32B, allocated by Mutator-1)
+[   78.00 ms] Mutator-3   RECLAIM  cycle 2: swept obj#8 (16B, allocated by Mutator-3)
+[   78.01 ms] Mutator-3   RECLAIM  cycle 2: swept obj#10 (24B, allocated by Mutator-2)
+[   78.02 ms] Mutator-3   GC-DONE  cycle 2: freed 6 obj / 136B  |  [#######.......] 120/256B (46.9%)
+[   78.02 ms] Mutator-3   GC-STOP  world resumed -- mutators released
+[   78.08 ms] Mutator-3   ALLOC    reserved 40B for obj#13  ->  pool at 160/256B
+[   78.11 ms] Mutator-3   CREATE   obj#13 constructed and rooted in Mutator-3's frame
+[   81.88 ms] Mutator-2   ALLOC    reserved 32B for obj#14  ->  pool at 192/256B
+[   81.90 ms] Mutator-2   CREATE   obj#14 constructed and rooted in Mutator-2's frame
+[   85.30 ms] Mutator-1   ALLOC    reserved 16B for obj#15  ->  pool at 208/256B
+[   85.31 ms] Mutator-1   CREATE   obj#15 constructed and rooted in Mutator-1's frame
+[   88.38 ms] Mutator-1   LINK     obj#12 now references obj#15
+[   88.40 ms] Mutator-1   DROP     Mutator-1 released obj#15 -- candidate for sweeping
+[   89.10 ms] Mutator-2   DROP     Mutator-2 released obj#2 -- candidate for sweeping
+[   89.55 ms] Mutator-3   DROP     Mutator-3 frame unwound, releasing obj#11, obj#13
+[   89.55 ms] Mutator-3   THREAD   finished -- all frames unwound
+[   92.01 ms] Collector   GC-STOP  collection requested (periodic timer)
+[   92.02 ms] Collector   GC-STOP  world stopped -- heap is quiescent
+[   92.05 ms] Collector   GC-MARK  cycle 3: mark from 3 roots: #9, #12, #14
+[   92.06 ms] Collector   GC-MARK  cycle 3: 4 of 7 object(s) reachable
+[   92.07 ms] Collector   RECLAIM  cycle 3: swept obj#2 (24B, allocated by Mutator-2)
+[   92.07 ms] Collector   RECLAIM  cycle 3: swept obj#11 (40B, allocated by Mutator-3)
+[   92.07 ms] Collector   RECLAIM  cycle 3: swept obj#13 (40B, allocated by Mutator-3)
+[   92.08 ms] Collector   GC-DONE  cycle 3: freed 3 obj / 104B  |  [######........] 104/256B (40.6%)
+[   92.09 ms] Collector   GC-STOP  world resumed -- mutators released
+[   96.62 ms] Mutator-2   DROP     Mutator-2 frame unwound, releasing obj#14
+[   96.64 ms] Mutator-2   THREAD   finished -- all frames unwound
+[   97.29 ms] Mutator-1   DROP     Mutator-1 frame unwound, releasing obj#9, obj#12
+[   97.52 ms] Mutator-1   THREAD   finished -- all frames unwound
+[   97.56 ms] MainThread  THREAD   main joined all mutators -- roots are now empty
+[   97.59 ms] Collector   THREAD   collector offline
+[   97.62 ms] MainThread  GC-STOP  collection requested (runtime shutdown -- final sweep)
+[   97.62 ms] MainThread  GC-STOP  world stopped -- heap is quiescent
+[   97.63 ms] MainThread  GC-MARK  cycle 4: mark from 0 roots: none
+[   97.63 ms] MainThread  GC-MARK  cycle 4: 0 of 4 object(s) reachable
+[   97.64 ms] MainThread  RECLAIM  cycle 4: swept obj#9 (16B, allocated by Mutator-1)
+[   97.64 ms] MainThread  RECLAIM  cycle 4: swept obj#12 (40B, allocated by Mutator-1)
+[   97.64 ms] MainThread  RECLAIM  cycle 4: swept obj#14 (32B, allocated by Mutator-2)
+[   97.64 ms] MainThread  RECLAIM  cycle 4: swept obj#15 (16B, allocated by Mutator-1)
+[   97.65 ms] MainThread  GC-DONE  cycle 4: freed 4 obj / 104B  |  [..............]   0/256B ( 0.0%)
+[   97.65 ms] MainThread  GC-STOP  world resumed -- mutators released
+
+========================================================================================
+  Simulation Summary
+========================================================================================
+  Pool capacity ................ 256 B
+  Objects allocated ............ 15
+  Objects reclaimed ............ 15
+  Bytes reclaimed .............. 400 B
+  Peak utilization ............. 256 B (100.0% of pool)
+  Collection cycles ............ 4
+  Allocation failures (OOM) .... 1
+  Live objects at shutdown ..... 0 (pool fully drained)
+  Bytes still in use ........... 0 B
+

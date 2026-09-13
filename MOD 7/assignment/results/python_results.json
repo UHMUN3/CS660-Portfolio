@@ -1,0 +1,77 @@
+{
+  "language": "python",
+  "environment": {
+    "python_version": "3.13.0",
+    "implementation": "CPython",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "gil_enabled": true,
+    "int_object_bytes": 28,
+    "pointer_bytes": 8,
+    "recursion_limit": 1000,
+    "timestamp": "2026-08-23 21:52:31"
+  },
+  "results": [
+    {
+      "function": "quick_sort",
+      "dataset": "shared",
+      "n": 100000,
+      "iterations": 5,
+      "avg_time_ms": 83.05487497709692,
+      "min_time_ms": 82.55191706120968,
+      "max_time_ms": 84.03124986216426,
+      "stdev_time_ms": 0.6342225077076382,
+      "peak_alloc_mb": 0.00079345703125,
+      "input_mb": 3.448087692260742,
+      "peak_total_mb": 3.448881149291992,
+      "correct": true,
+      "notes": ""
+    },
+    {
+      "function": "merge_sort",
+      "dataset": "shared",
+      "n": 100000,
+      "iterations": 5,
+      "avg_time_ms": 113.9248832128942,
+      "min_time_ms": 113.10533294454217,
+      "max_time_ms": 114.47958298958838,
+      "stdev_time_ms": 0.5086477748108477,
+      "peak_alloc_mb": 1.65142822265625,
+      "input_mb": 3.448087692260742,
+      "peak_total_mb": 5.099515914916992,
+      "correct": true,
+      "notes": ""
+    },
+    {
+      "function": "heap_sort",
+      "dataset": "shared",
+      "n": 100000,
+      "iterations": 5,
+      "avg_time_ms": 139.14319183677435,
+      "min_time_ms": 138.34833400323987,
+      "max_time_ms": 140.3315830975771,
+      "stdev_time_ms": 0.7450587933833911,
+      "peak_alloc_mb": 0.000217437744140625,
+      "input_mb": 3.448087692260742,
+      "peak_total_mb": 3.448305130004883,
+      "correct": true,
+      "notes": ""
+    },
+    {
+      "function": "list.sort [stdlib]",
+      "dataset": "shared",
+      "n": 100000,
+      "iterations": 5,
+      "avg_time_ms": 7.969466969370842,
+      "min_time_ms": 7.944708922877908,
+      "max_time_ms": 8.005917072296143,
+      "stdev_time_ms": 0.025316773362315307,
+      "peak_alloc_mb": 0.3813018798828125,
+      "input_mb": 3.448087692260742,
+      "peak_total_mb": 3.8293895721435547,
+      "correct": true,
+      "notes": ""
+    }
+  ]
+}

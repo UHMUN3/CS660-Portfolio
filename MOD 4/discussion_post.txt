@@ -1,0 +1,73 @@
+Errors as Control Flow vs. Errors as Data: Python and Haskell
+
+I chose Python (imperative) and Haskell (functional), since this module had me
+writing recursive traversal and exception handling in Python and the contrast
+became obvious once I imagined the same problem in Haskell.
+
+Python raises exceptions that propagate up the call stack until something
+catches them, and a single try block can pair with multiple except clauses,
+an else, and a finally (Python Software Foundation, n.d.). Nothing in a
+function's signature tells you what it can raise. In my activity code, summing
+a mass field looked like this:
+
+    try:
+        total += float(value)
+    except (TypeError, ValueError):
+        print(f"[warn] skipping non-numeric mass: {value!r}")
+
+The recursion continues and one corrupt record doesn't destroy the other
+twenty-four. But the function still returns a plain float -- the caller has no
+way to know anything went wrong.
+
+Haskell treats failure as a value, not an event. Pure functions return Maybe a
+when a value may simply be absent, or Either e a when a failure needs to
+explain itself, so the failure case lives in the type and the compiler forces
+you to acknowledge it (HaskellWiki, n.d.). Because these are monads, chained
+operations short-circuit automatically (Lipovaca, 2011). The nested descent I
+wrote recursively in Python becomes:
+
+    firstMoonName :: Catalog -> Maybe String
+    firstMoonName cat = do
+      galaxy <- firstGalaxy cat
+      system <- firstSystem galaxy
+      planet <- firstPlanet system
+      moon   <- firstMoon planet
+      return (moonName moon)
+
+If any step yields Nothing, the whole expression is Nothing -- no handler, no
+null checks. Haskell does have real exceptions, but they are reserved for IO,
+where failure genuinely is external and unpredictable (O'Sullivan et al.,
+2008).
+
+The philosophical split: Python asks "what do I do when this blows up?" Haskell
+asks "what type accurately describes everything this can produce?" Imperative
+code treats errors as exceptional events interrupting control flow; functional
+code treats them as ordinary data flowing through the same pipeline as success.
+
+Tradeoffs. Result types can't be forgotten, but they propagate -- adding a
+failure mode deep in a call chain forces changes all the way up, whereas an
+exception raised at depth 40 can be caught at depth 2 with nothing in between
+touched. Exceptions also carry tracebacks and rich context for free, while a
+bare Maybe discards why it failed. My honest takeaway: try/except was right for
+a traversal that logs and continues, but returning (total, errors) would have
+been more truthful about what my function actually did.
+
+Question for the group: is an unchecked exception that crashes a request handler
+really worse than a result type someone pattern-matched and then ignored? One
+fails loudly; the other fails silently and compiles.
+
+
+References
+
+HaskellWiki. (n.d.). Handling errors in Haskell. Retrieved August 2, 2026, from
+     https://wiki.haskell.org/Handling_errors_in_Haskell
+
+Lipovaca, M. (2011). Learn you a Haskell for great good!: A beginner's guide.
+     No Starch Press.
+
+O'Sullivan, B., Goerzen, J., & Stewart, D. (2008). Real world Haskell.
+     O'Reilly Media.
+
+Python Software Foundation. (n.d.). 8. Errors and exceptions. Python 3
+     documentation. Retrieved August 2, 2026, from
+     https://docs.python.org/3/tutorial/errors.html
